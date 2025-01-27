@@ -38,6 +38,8 @@ function create_DB {
 			fi
 	done
 }
+
+
 function connect_DB {
 	while true
 	do
@@ -49,10 +51,49 @@ function connect_DB {
 		    		continue
 	       		fi
 		
+			if [[ "$DBName" =~ [^a-zA-Z0-9_-] ]]
+			 then
+		    		echo "Error: Database name can only contain letters, numbers, underscores, and hyphens"
+		    		continue
+			fi
+			
 			if [[ -e "$DBDIR/$DBName" ]]
 			then
 				cd "$DBDIR/$DBName"
 				echo "Connected to database '$DBName' successfully"
+				select nestedMenu in CreateTable ListTables DropTable InsertIntoTable SelectFromTable DeleteFromTable UpdateTable Exit
+				do
+				case $nestedMenu in
+				"CreateTable")
+					create_table
+					;;
+				"ListTables")
+					list_table
+					;;
+				"DropTable")
+					drop_table
+					;;
+				"InsertIntoTable")
+					insert_into_table
+					;;
+				"SelectFromTable")
+					select_from_table
+					;;
+				"DeleteFromTable")
+					delete_from_table
+					;;
+				"UpdateTable")
+					update_table
+					;;
+				"Exit") 
+					echo "Exiting..."; 
+					break 
+					;;
+				*)
+        				echo "Invalid option"
+        				;;
+   			 	esac
+				done
 				break
 			else
 				echo "Database '$DBName' does not exist."
