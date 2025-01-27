@@ -1,58 +1,90 @@
 #!/bin/bash
+shopt -s extglob
 #let all DB store in spacific dir    -e ->exist
 
 DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
-if [[ ! -e $DBDIR ]]
-then
-	mkdir -p $DBDIR
-	echo "DataBase is Ready"
-else
-	cd $DBDIR
-	echo "DataBase already exists."
-fi
-select choice in CreateDataBase ConnectDataBase
+function init_db_dir {
+	if [[ ! -e $DBDIR ]]
+	then
+		mkdir -p $DBDIR
+		echo "Database directory initialized"
+	else
+		cd $DBDIR
+		echo "DataBase already exists"
+	fi
+}
+function create_DB {
+	while true
+	do
+		read -p "Please enter database name: " DBName
+			#-z checks if the string has zero length
+			 if [[ -z "$DBName" ]]
+			then
+		    		echo "Database name cannot be empty. Please try again."
+		    		continue
+			fi
+			if [[ "$DBName" =~ [^a-zA-Z0-9_-] ]]; then
+	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
+	    			continue
+	  		fi
+			if [[ -e "$DBDIR/$DBName" ]]
+			then
+				echo  "Database '$DBName' already exists"
+				continue
+			else 
+				mkdir $DBName
+				echo "DataBase '$DBName' is created successfully"
+				break
+			fi
+	done
+}
+function connect_DB {
+	while true
+	do
+		read -p "Please enter database name to connect: " DBName
+			
+			if [[ -z "$DBName" ]]
+			then
+		    		echo "Database name cannot be empty. Please try again."
+		    		continue
+	       		fi
+		
+			if [[ -e "$DBDIR/$DBName" ]]
+			then
+				cd "$DBDIR/$DBName"
+				echo "Connected to database '$DBName' successfully"
+				break
+			else
+				echo "Database '$DBName' does not exist."
+			fi
+	done
+}
+function main_menu {
+  echo "=========================================="
+  echo "Welcome to ITI DBMS"
+  echo "Working directory: $DBDIR"
+  echo "=========================================="
+
+select choice in CreateDataBase ConnectDataBase Exit
 do 
 	
 	case $choice in
 	"CreateDataBase")
-		read -p "Please enter database name: " DBName
-		#-z checks if the string has zero length
-		 if [[ -z "$DBName" ]]
-        	then
-            		echo "Database name cannot be empty. Please try again."
-            		continue
-        	fi
-        	
-		if [[ -e "$DBDIR/$DBName" ]]
-		then
-			echo  "Database '$DBName' already exists"
-		else 
-			mkdir $DBName
-			echo "DataBase '$DBName' is created successfully"
-		fi
+		create_DB
 		;;
 	
 	"ConnectDataBase")
-		
-		read -p "Please enter database name to connect: " DBName
-		
-		if [[ -z "$DBName" ]]
-        	then
-            		echo "Database name cannot be empty. Please try again."
-            		continue
-       		fi
-        
-		if [[ -e "$DBDIR/$DBName" ]]
-		then
-			cd "$DBDIR/$DBName"
-			echo "Connected to database '$DBName' successfully"
-		else
-			echo "Database '$DBName' does not exist."
-		fi
+		connect_DB
+		;;
+	"Exit") 
+		echo "Exiting..."; 
+		break 
 		;;
 	*)
-        	echo "Invalid option. Please select either 'CreateDataBase' or 'ConnectDataBase'."
+        	echo "Invalid option. Please select either 'CreateDataBase' or 'ConnectDataBase' or 'Exit'."
         	;;
     esac
-
 done
+}
+init_db_dir
+main_menu
