@@ -1,0 +1,58 @@
+#!/bin/bash
+#let all DB store in spacific dir    -e ->exist
+
+DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
+if [[ ! -e $DBDIR ]]
+then
+	mkdir -p $DBDIR
+	echo "DataBase is Ready"
+else
+	cd $DBDIR
+	echo "DataBase already exists."
+fi
+select choice in CreateDataBase ConnectDataBase
+do 
+	
+	case $choice in
+	"CreateDataBase")
+		read -p "Please enter database name: " DBName
+		#-z checks if the string has zero length
+		 if [[ -z "$DBName" ]]
+        	then
+            		echo "Database name cannot be empty. Please try again."
+            		continue
+        	fi
+        	
+		if [[ -e "$DBDIR/$DBName" ]]
+		then
+			echo  "Database '$DBName' already exists"
+		else 
+			mkdir $DBName
+			echo "DataBase '$DBName' is created successfully"
+		fi
+		;;
+	
+	"ConnectDataBase")
+		
+		read -p "Please enter database name to connect: " DBName
+		
+		if [[ -z "$DBName" ]]
+        	then
+            		echo "Database name cannot be empty. Please try again."
+            		continue
+       		fi
+        
+		if [[ -e "$DBDIR/$DBName" ]]
+		then
+			cd "$DBDIR/$DBName"
+			echo "Connected to database '$DBName' successfully"
+		else
+			echo "Database '$DBName' does not exist."
+		fi
+		;;
+	*)
+        	echo "Invalid option. Please select either 'CreateDataBase' or 'ConnectDataBase'."
+        	;;
+    esac
+
+done
