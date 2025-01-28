@@ -39,6 +39,54 @@ function create_DB {
 	done
 }
 
+function create_table {
+	
+	while true
+	do
+		read -p "Please enter table name: " tableName
+			 if [[ -z "$tableName" ]]
+			then
+		    		echo "Table name cannot be empty. Please try again."
+		    		continue
+			fi
+			if [[ "$tableName" =~ [^a-zA-Z0-9_-] ]]; then
+	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
+	    			continue
+	  		fi
+			if [[ -e "$DBDIR/$tableName" ]]
+			then
+				echo  "Table '$tableName' already exists"
+				continue
+			else 
+				#create cols and rows
+				touch $tableName
+				echo "Table '$tableName' is created successfully"
+				break
+			fi
+	done
+}
+
+function drop_table {
+	read -p "Please enter table name: " tableName
+	if [[ -e "$tableName" ]]
+	then 
+		rm -i "$tableName"
+		echo "Table '$tableName' dropped successfully."
+	else
+		echo "Error: Table '$tableName' does not exist."
+	fi
+}
+
+function list_table {
+	if [[ "$(ls -A "$DBDIR/$DBName")" ]]
+	then
+		echo "Available tables: "
+		ls
+	else
+		echo "DataBase is Empty"
+	fi
+	
+}
 
 function connect_DB {
 	while true
@@ -122,7 +170,7 @@ do
 		break 
 		;;
 	*)
-        	echo "Invalid option. Please select either 'CreateDataBase' or 'ConnectDataBase' or 'Exit'."
+        	echo "Invalid option"
         	;;
     esac
 done
