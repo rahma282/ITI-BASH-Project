@@ -58,7 +58,27 @@ function create_table {
 				echo  "Table '$tableName' already exists"
 				continue
 			else 
+			flag=0
 				#create cols and rows
+				read -p "please enter the columns number: " colNum
+				for ((i=0;i<$colNum;i++))
+				do
+				line =""
+				read -p "please enter name of the column number $(($i+1)): " colName
+				line+=$colName:
+				read -p "please enter datatype of the column $colName: " colDataType
+				line+= $colDataType:
+				if [[ flag -eq 0 ]]
+				then
+					read -p "Do you want to make this column a primary kay? (y/n)" check
+					if [[ yes =~ $check ]]
+					then 
+					line+=pk
+					flag=1
+					fi
+				fi
+				echo $line >> .$tableName-MetaData
+				done
 				touch $tableName
 				echo "Table '$tableName' is created successfully"
 				break
