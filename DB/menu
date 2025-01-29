@@ -10,6 +10,7 @@ source ./functions/connectMenu_db
 source ./functions/list_tb
 source ./functions/drop_tb
 source ./functions/create_tb
+source ./functions/insertin_tb
 
 
 DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"

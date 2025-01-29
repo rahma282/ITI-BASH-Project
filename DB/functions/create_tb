@@ -84,11 +84,11 @@ function create_table {
 				
 				line=$line$colName:
 				echo ""
-				echo "Notice that available datatypes are : [string, number, boolean]..."
+				echo "Notice that available datatypes are : [text, number, boolean]..."
 				read -p "please enter datatype of the column $colName (-1 to back to menu): " colDataType
 
 				case $colDataType in
-				"string")
+				"text")
 					line=$line$colDataType
 				;;
 				"boolean")

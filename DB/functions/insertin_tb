@@ -1,0 +1,89 @@
+#!/bin/bash
+function insert_into_table {
+	read -p "Enter table name (-1 to back to menu) : " TBName
+	if [[ $TBName = -1 ]]
+	then
+		break
+	fi
+	if [[ ! -e $TBName ]]
+	then
+		echo "Table '$TBName' does not exist!"
+		continue
+	fi
+	while true
+	do
+	line=""
+		for var in `cat .$TBName-MetaData`
+		do
+		
+			colPK=`echo $var | cut -d : -f1`
+			colName=`echo $var | cut -d : -f2`
+			colType=`echo $var | cut -d : -f3`
+			
+			read -p "Please Enter $colName value (-1 to back to menu) : " value
+			if [[ value = -1 ]]
+			then
+				break 1	
+			fi
+			if [[ -z "$value" ]]
+			then
+				clear
+		    		echo "Column value cannot be empty. Please try again."
+		    		continue 2
+			fi
+			if [[ colPK ]]
+			then
+   			if awk -F: -v val="$value" '$1 == val { found=1; exit } END { exit !found }' $TBName
+   			then
+				clear
+				echo ""
+	        		echo "Error duplicated value in primary key.. "
+	        		continue 2
+    				fi
+    			fi
+
+    			case $colType in
+			"text")
+			
+				if [[ ! "$value" =~ ^[[:alpha:]]+$ ]]
+				then
+					clear 
+					echo "$colName is a text, only alphabets allowed"
+					continue 2
+				fi
+			;;
+	
+			"number")
+			
+				if [[ ! "$value" = [[:digit:]] ]]
+				then
+					clear 
+					echo "$colName is a number, only digits allowed "
+					continue 2
+				fi
+			;;
+			
+			"boolean")
+				if [[ "$value" != "true" && "$value" != "false" ]]
+				then
+					clear
+					echo "$colName is a boolean, only true or false allowed "
+					continue 2
+				fi
+			;;
+			*)
+				echo "Error !"
+
+	        	;;
+		        esac
+			line=$line$value:
+		done
+		echo "${line::-1}" >> $TBName
+		read -p "Insert another row (y/n) ?" again
+		if [[ $again = n ]]
+		then
+		break 1
+		fi
+	done
+
+}
