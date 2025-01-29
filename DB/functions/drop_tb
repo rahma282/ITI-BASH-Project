@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function drop_table {
+	if [[ ! "$(ls -1 "$DBDIR/$DBName")" ]]
+	then
+		clear
+		echo "Empty Database"
+		return
+	fi	
+	echo "Database Tables : "
+	ls -1	
+	read -p "Please enter table name: " tableName
+	if [[ -e "$tableName" && -f $tableName ]]
+	then 
+
+		rm "$tableName"
+		rm .$tableName-MetaData
+		clear
+		echo "Table '$tableName' dropped successfully."
+	else
+		clear
+		echo "Error: Table '$tableName' does not exist."
+	fi
+}

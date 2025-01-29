@@ -1,0 +1,34 @@
+#!/bin/bash
+
+function create_DB {
+	while true
+	do
+		read -p "Please enter database name(-1 to back to main menu): " DBName
+		
+			if [[ $DBName == -1 ]]
+			then
+				clear
+				break
+			fi
+			#-z checks if the string has zero length
+			 if [[ -z "$DBName" ]]
+			then
+		    		echo "Database name cannot be empty. Please try again."
+		    		continue
+			fi
+ 			if [[ ! "$DBName" =~ ^[a-zA-Z0-9_]+$ ]]; then
+	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
+	    			continue
+	  		fi
+			if [[ -e "$DBDIR/$DBName" ]]
+			then
+				echo  "Database '$DBName' already exists"
+				continue
+			else 
+				mkdir $DBName
+				echo "Database '$DBName' is created successfully"
+				break
+			fi
+	done
+}
+
