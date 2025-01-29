@@ -41,48 +41,76 @@ function create_DB {
 
 function create_table {
 	
-	while true
-	do
-		read -p "Please enter table name: " tableName
-			 if [[ -z "$tableName" ]]
-			then
-		    		echo "Table name cannot be empty. Please try again."
-		    		continue
-			fi
-			if [[ "$tableName" =~ [^a-zA-Z0-9_-] ]]; then
-	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
-	    			continue
-	  		fi
-			if [[ -e "$DBDIR/$tableName" ]]
-			then
-				echo  "Table '$tableName' already exists"
-				continue
-			else 
-			flag=0
-				#create cols and rows
-				read -p "please enter the columns number: " colNum
-				for ((i=0;i<$colNum;i++))
-				do
-				line =""
-				read -p "please enter name of the column number $(($i+1)): " colName
-				line+=$colName:
-				read -p "please enter datatype of the column $colName: " colDataType
-				line+= $colDataType:
-				if [[ flag -eq 0 ]]
-				then
-					read -p "Do you want to make this column a primary kay? (y/n)" check
-					if [[ yes =~ $check ]]
-					then 
-					line+=pk
-					flag=1
-					fi
-				fi
-				echo $line >> .$tableName-MetaData
-				done
-				touch $tableName
-				echo "Table '$tableName' is created successfully"
-				break
-			fi
+	while true; do
+	    read -p "Please enter table name: " tableName
+	    if [[ -z "$tableName" ]]
+	    then
+		echo "Table name cannot be empty.. Please try again"
+		continue
+	    fi
+
+	    if [[ "$tableName" =~ [^a-zA-Z0-9_-] ]]
+	    then
+		echo "Error: Table name can only contain letters, numbers, underscores, and hyphens"
+		continue
+	    fi
+
+	    if [[ -e "./$tableName" ]]
+	    then
+		echo "Table '$tableName' already exists"
+		continue
+	    else 
+		flag=0  
+		read -p "Please enter the number of columns: " colNum
+		while ! [[ $colNum =~ ^[1-9][0-9]*$ ]]
+		do
+		    echo "Invalid input. Please enter a positive integer."
+		    read -p "Please enter the number of columns: " colNum
+		done
+
+		metaDataFile=".$tableName-MetaData"
+		> "$metaDataFile" 
+
+		for ((i = 0; i < colNum; i++))
+		 do
+		    colName=""
+		    while [[ -z "$colName" || "$colName" =~ [^a-zA-Z0-9_-] ]]
+		     do
+		        read -p "Please enter the name of column $(($i + 1)): " colName
+		        if [[ -z "$colName" || "$colName" =~ [^a-zA-Z0-9_-] ]]
+		         then
+		            echo "Invalid column name.. Please try again"
+		        fi
+		    done
+		    line="$colName:"
+
+		    colDataType=""
+		    while ! [[ "$colDataType" =~ ^(string|int)$ ]]
+		     do
+		        read -p "Please enter datatype for column '$colName' (string/int): " colDataType
+		        if ! [[ "$colDataType" =~ ^(string|int)$ ]]
+		        then
+		            echo "Invalid datatype.. Choose either 'string' or 'int'"
+		        fi
+		    done
+		    line+="$colDataType"
+
+		    if [[ $flag -eq 0 ]]
+		     then
+		        read -p "Do you want to make this column a primary key? (y/n): " check
+		        if [[ $check =~ ^[yY]$ ]]; then
+		            line+=":pk"
+		            flag=1
+		        fi
+		    fi
+
+		    echo "$line" >> "$metaDataFile"
+		done    
+
+		touch "$tableName"
+		echo "Table '$tableName' created successfully"
+		break
+	    fi
 	done
 }
 
@@ -95,6 +123,16 @@ function drop_table {
 	else
 		echo "Error: Table '$tableName' does not exist."
 	fi
+}
+
+function insert_into_table {
+
+
+
+}
+
+function delete_from_table {
+
 }
 
 function list_table {
