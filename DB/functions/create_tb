@@ -1,0 +1,119 @@
+#!/bin/bash
+
+function create_table {
+	
+	while true
+	do
+		read -p "Please enter table name(-1 to back to menu) : " tableName
+		
+			if [[ $tableName == -1 ]]
+			then
+				clear
+				break
+			fi
+			
+			if [[ -z "$tableName" ]]
+			then
+				clear
+		    		echo "Table name cannot be empty. Please try again."
+		    		continue
+			fi
+			
+			if [[ ! "$tableName" =~ ^[a-zA-Z0-9_]+$ ]]
+			then
+				clear
+	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
+	    			continue
+	  		fi
+	  		
+			if [[ -e "$DBDIR/$tableName" && -f "$DBDIR/$tableName" ]]
+			then
+				clear
+				echo  "Table '$tableName' already exists"
+				continue
+				
+			else
+				#create cols and rows
+				echo ""
+				read -p "please enter the columns number(-1 to back to menu) : " colNum
+				if [[ $colNum == -1 ]]
+				then
+					clear
+					break
+				fi
+				if [[ ! $colNum = [[:digit:]] ]]
+				then
+					clear
+					echo "Only digits available for columns number"
+					continue
+				fi
+				for ((i=0;i<$colNum;i++))
+				do
+				line=:
+				if [[ i -eq 0 ]]
+				then
+					echo ""
+					echo "Notice That this Line is gonna be the primary key of your table.." 
+					line=pk:
+					flag=1
+				fi
+
+				read -p "please enter name of the column number $(($i+1)) (-1 to back to menu) : " colName
+				if [[ $colName == -1 ]]
+				then
+					clear
+					break 1
+				fi
+				if [[ ! $colName =~ ^[[:alpha:]]+$ ]]
+				then
+					clear
+					echo "Only alphabets available for columns name"
+					((i=i-1))
+        				continue 
+				fi
+				
+				if [[ -e .$tableName-MetaData ]]; then
+    				if ! awk -F: -v colName="$colName" '$2 == colName { exit 1 }' .$tableName-MetaData; then
+        			echo "Column name repeated"
+        			((i = i - 1))  
+       				continue       
+    				fi
+				fi
+
+
+				
+				line=$line$colName:
+				echo ""
+				echo "Notice that available datatypes are : [string, number, boolean]..."
+				read -p "please enter datatype of the column $colName (-1 to back to menu): " colDataType
+
+				case $colDataType in
+				"string")
+					line=$line$colDataType
+				;;
+				"boolean")
+					line=$line$colDataType
+				;;
+				"number")
+					line=$line$colDataType
+				;;
+				"-1") 
+					clear
+					break 1
+				;;
+				*)
+					clear
+        				echo "Invalid datatype."
+        				((i=i-1))
+        				continue 
+        			;;
+    				esac
+
+				echo $line >> .$tableName-MetaData
+				done
+				touch $tableName
+				echo "Table '$tableName' has been created successfully"
+				break
+			fi
+	done
+}

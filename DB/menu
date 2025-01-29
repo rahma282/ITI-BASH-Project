@@ -2,236 +2,77 @@
 shopt -s extglob
 #let all DB store in spacific dir    -e ->exist
 
+source ./functions/create_db
+source ./functions/connect_db
+source ./functions/list_db
+source ./functions/drop_db
+source ./functions/connectMenu_db
+source ./functions/list_tb
+source ./functions/drop_tb
+source ./functions/create_tb
+
+
 DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
+
 function init_db_dir {
 	if [[ ! -e $DBDIR ]]
 	then
 		mkdir -p $DBDIR
-		echo "Database directory initialized"
 	else
 		cd $DBDIR
-		echo "DataBase already exists"
 	fi
-}
-function create_DB {
-	while true
-	do
-		read -p "Please enter database name: " DBName
-			#-z checks if the string has zero length
-			 if [[ -z "$DBName" ]]
-			then
-		    		echo "Database name cannot be empty. Please try again."
-		    		continue
-			fi
-			if [[ "$DBName" =~ [^a-zA-Z0-9_-] ]]; then
-	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
-	    			continue
-	  		fi
-			if [[ -e "$DBDIR/$DBName" ]]
-			then
-				echo  "Database '$DBName' already exists"
-				continue
-			else 
-				mkdir $DBName
-				echo "DataBase '$DBName' is created successfully"
-				break
-			fi
-	done
+	clear
+	echo "Database directory Loaded"
 }
 
-function create_table {
-	
-	while true; do
-	    read -p "Please enter table name: " tableName
-	    if [[ -z "$tableName" ]]
-	    then
-		echo "Table name cannot be empty.. Please try again"
-		continue
-	    fi
-
-	    if [[ "$tableName" =~ [^a-zA-Z0-9_-] ]]
-	    then
-		echo "Error: Table name can only contain letters, numbers, underscores, and hyphens"
-		continue
-	    fi
-
-	    if [[ -e "./$tableName" ]]
-	    then
-		echo "Table '$tableName' already exists"
-		continue
-	    else 
-		flag=0  
-		read -p "Please enter the number of columns: " colNum
-		while ! [[ $colNum =~ ^[1-9][0-9]*$ ]]
-		do
-		    echo "Invalid input. Please enter a positive integer."
-		    read -p "Please enter the number of columns: " colNum
-		done
-
-		metaDataFile=".$tableName-MetaData"
-		> "$metaDataFile" 
-
-		for ((i = 0; i < colNum; i++))
-		 do
-		    colName=""
-		    while [[ -z "$colName" || "$colName" =~ [^a-zA-Z0-9_-] ]]
-		     do
-		        read -p "Please enter the name of column $(($i + 1)): " colName
-		        if [[ -z "$colName" || "$colName" =~ [^a-zA-Z0-9_-] ]]
-		         then
-		            echo "Invalid column name.. Please try again"
-		        fi
-		    done
-		    line="$colName:"
-
-		    colDataType=""
-		    while ! [[ "$colDataType" =~ ^(string|int)$ ]]
-		     do
-		        read -p "Please enter datatype for column '$colName' (string/int): " colDataType
-		        if ! [[ "$colDataType" =~ ^(string|int)$ ]]
-		        then
-		            echo "Invalid datatype.. Choose either 'string' or 'int'"
-		        fi
-		    done
-		    line+="$colDataType"
-
-		    if [[ $flag -eq 0 ]]
-		     then
-		        read -p "Do you want to make this column a primary key? (y/n): " check
-		        if [[ $check =~ ^[yY]$ ]]; then
-		            line+=":pk"
-		            flag=1
-		        fi
-		    fi
-
-		    echo "$line" >> "$metaDataFile"
-		done    
-
-		touch "$tableName"
-		echo "Table '$tableName' created successfully"
-		break
-	    fi
-	done
-}
-
-function drop_table {
-	read -p "Please enter table name: " tableName
-	if [[ -e "$tableName" ]]
-	then 
-		rm -i "$tableName"
-		echo "Table '$tableName' dropped successfully."
-	else
-		echo "Error: Table '$tableName' does not exist."
-	fi
-}
-
-function insert_into_table {
-
-
-
-}
-
-function delete_from_table {
-
-}
-
-function list_table {
-	if [[ "$(ls -A "$DBDIR/$DBName")" ]]
-	then
-		echo "Available tables: "
-		ls
-	else
-		echo "DataBase is Empty"
-	fi
-	
-}
-
-function connect_DB {
-	while true
-	do
-		read -p "Please enter database name to connect: " DBName
-			
-			if [[ -z "$DBName" ]]
-			then
-		    		echo "Database name cannot be empty. Please try again."
-		    		continue
-	       		fi
-		
-			if [[ "$DBName" =~ [^a-zA-Z0-9_-] ]]
-			 then
-		    		echo "Error: Database name can only contain letters, numbers, underscores, and hyphens"
-		    		continue
-			fi
-			
-			if [[ -e "$DBDIR/$DBName" ]]
-			then
-				cd "$DBDIR/$DBName"
-				echo "Connected to database '$DBName' successfully"
-				select nestedMenu in CreateTable ListTables DropTable InsertIntoTable SelectFromTable DeleteFromTable UpdateTable Exit
-				do
-				case $nestedMenu in
-				"CreateTable")
-					create_table
-					;;
-				"ListTables")
-					list_table
-					;;
-				"DropTable")
-					drop_table
-					;;
-				"InsertIntoTable")
-					insert_into_table
-					;;
-				"SelectFromTable")
-					select_from_table
-					;;
-				"DeleteFromTable")
-					delete_from_table
-					;;
-				"UpdateTable")
-					update_table
-					;;
-				"Exit") 
-					echo "Exiting..."; 
-					break 
-					;;
-				*)
-        				echo "Invalid option"
-        				;;
-   			 	esac
-				done
-				break
-			else
-				echo "Database '$DBName' does not exist."
-			fi
-	done
-}
 function main_menu {
   echo "=========================================="
   echo "Welcome to ITI DBMS"
   echo "Working directory: $DBDIR"
   echo "=========================================="
-
-select choice in CreateDataBase ConnectDataBase Exit
-do 
-	
+  echo
+  while true ;
+  do
+  	echo ""
+        echo "Main Menu"
+        echo ""
+        echo "1 - Create Database"
+        echo "2 - List Databases"
+        echo "3 - Connect To Database"
+        echo "4 - Drop Database"
+        echo "5 - Exit"
+        echo ""
+        read -r -p "Enter your choice(1-5) : " choice
+        
 	case $choice in
-	"CreateDataBase")
+	"1")
 		create_DB
 		;;
 	
-	"ConnectDataBase")
+	"2")
+		list_db
+		;;
+		
+	"3")
 		connect_DB
 		;;
-	"Exit") 
+	"4")
+		drop_db
+		;;
+	"5") 
 		echo "Exiting..."; 
 		break 
 		;;
 	*)
-        	echo "Invalid option"
+		clear
+		echo ""
+        	echo "Invalid option."
+        	echo "==============="
+        	echo ""
         	;;
-    esac
-done
+        esac
+   done
+
 }
 init_db_dir
 main_menu

@@ -1,0 +1,8 @@
+#!/bin/bash
+function list_db {
+	clear
+	echo ""
+	echo "Available Databases : "
+	echo ""
+	ls -1
+}

@@ -1,0 +1,38 @@
+#!/bin/bash
+function connect_DB {
+	clear
+	while true
+	do
+			echo ""
+			echo "Available Databases :"
+			ls -1
+			echo ""
+			read -p "Please enter database name to connect(-1 to back to main menu): " DBName
+			if [[ $DBName = -1 ]]
+			then
+				break
+			fi
+			
+			if [[ -z "$DBName" ]]
+			then
+		    		echo "Database name cannot be empty. Please try again."
+		    		continue
+	       		fi
+			
+ 			if [[ ! "$DBName" =~ ^[a-zA-Z0-9_]+$ ]]; then
+    				echo "Error: Database name can only contain letters, numbers, and underscores."
+    	 			continue
+   			fi
+			
+			if [[ -e "$DBDIR/$DBName" ]]
+			then
+				cd "$DBDIR/$DBName"
+				clear
+				echo ""
+				connectMenu $DBName
+				break
+			else
+				echo "Database '$DBName' does not exist."
+			fi
+	done
+}
