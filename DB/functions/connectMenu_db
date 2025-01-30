@@ -48,7 +48,7 @@ function connectMenu {
 			break 
 			;;
 		*)
-			echo "Invalid option"
+			echo -e "${RED}Invalid option${RESET}"
 			;;
 	 	esac
 	done

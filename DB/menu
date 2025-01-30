@@ -33,7 +33,7 @@ source ./functions/drop_tb
 source ./functions/create_tb
 source ./functions/insertin_tb
 source ./functions/delete_from_table
-
+source ./functions/select_from_table
 
 DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
 

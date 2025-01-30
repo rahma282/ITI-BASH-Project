@@ -4,7 +4,7 @@ function connect_DB {
 	while true
 	do
 			echo ""
-			echo "Available Databases :"
+			echo -e "${MAGENTA}Available Databases :${RESET}"
 			ls -1
 			echo ""
 			read -p "Please enter database name to connect(-1 to back to main menu): " DBName
@@ -15,12 +15,12 @@ function connect_DB {
 			
 			if [[ -z "$DBName" ]]
 			then
-		    		echo "Database name cannot be empty. Please try again."
+		    		echo -e "${RED}Database name cannot be empty. Please try again.${RESET}"
 		    		continue
 	       		fi
 			
  			if [[ ! "$DBName" =~ ^[a-zA-Z0-9_]+$ ]]; then
-    				echo "Error: Database name can only contain letters, numbers, and underscores."
+    				echo -e "${RED}Error: Database name can only contain letters, numbers, and underscores.${RESET}"
     	 			continue
    			fi
 			
@@ -32,7 +32,7 @@ function connect_DB {
 				connectMenu $DBName
 				break
 			else
-				echo "Database '$DBName' does not exist."
+				echo -e "${YELLOW}Database '$DBName' does not exist.${RESET}"
 			fi
 	done
 }

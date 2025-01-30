@@ -73,7 +73,7 @@ function insert_into_table {
 				fi
 			;;
 			*)
-				echo "Error !"
+				echo -e "${RED}Error !${RESET}"
 
 	        	;;
 		        esac
