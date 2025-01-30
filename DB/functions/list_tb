@@ -4,7 +4,7 @@ function list_table {
 	if [[ "$(ls -1 "$DBDIR/$DBName")" ]]
 	then
 		clear
-		echo "Database Tables : "
+		echo -e"${BOLD}${MAGENTA}Database Tables : ${RESET}"
 		ls -1
 		echo ""
 		echo ""

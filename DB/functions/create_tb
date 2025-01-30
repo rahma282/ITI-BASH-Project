@@ -15,21 +15,21 @@ function create_table {
 			if [[ -z "$tableName" ]]
 			then
 				clear
-		    		echo "Table name cannot be empty. Please try again."
+		    		echo -e "${RED}Table name cannot be empty. Please try again.${RESET}"
 		    		continue
 			fi
 			
 			if [[ ! "$tableName" =~ ^[a-zA-Z0-9_]+$ ]]
 			then
 				clear
-	    			echo "Error: Database name can only contain letters, numbers, underscores, and hyphens."
+	    			echo -e "${RED}Error: Database name can only contain letters, numbers, underscores, and hyphens.${RESET}"
 	    			continue
 	  		fi
 	  		
 			if [[ -e "$DBDIR/$tableName" && -f "$DBDIR/$tableName" ]]
 			then
 				clear
-				echo  "Table '$tableName' already exists"
+				echo -e  "${YELLOW}Table '$tableName' already exists${RESET}"
 				continue
 				
 			else
@@ -53,7 +53,7 @@ function create_table {
 				if [[ i -eq 0 ]]
 				then
 					echo ""
-					echo "Notice That this Line is gonna be the primary key of your table.." 
+					echo -e "${RED}Notice That this Line is gonna be the primary key of your table..${RESET}" 
 					line=pk:
 					flag=1
 				fi
@@ -84,7 +84,7 @@ function create_table {
 				
 				line=$line$colName:
 				echo ""
-				echo "Notice that available datatypes are : [text, number, boolean]..."
+				echo -e "${BLUE}Notice that available datatypes are : [text, number, boolean]...${RESET}"
 				read -p "please enter datatype of the column $colName (-1 to back to menu): " colDataType
 
 				case $colDataType in
@@ -112,7 +112,7 @@ function create_table {
 				echo $line >> .$tableName-MetaData
 				done
 				touch $tableName
-				echo "Table '$tableName' has been created successfully"
+				echo -e "${GREEN}Table '$tableName' has been created successfully${RESET}"
 				break
 			fi
 	done

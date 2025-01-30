@@ -5,7 +5,7 @@ function drop_db {
 	while true
 	do
 		echo ""
-		echo "Available Databases :"
+		echo -e "${CYAN}Available Databases :${RESET}"
 		ls -1
 		echo ""
 		read -p "Enter Database name to drop (-1 to back to main menu) : " DBName
@@ -16,22 +16,22 @@ function drop_db {
 			
 			if [[ -z "$DBName" ]]
 			then
-		    		echo "Error, You've Entered Nothing !"
+		    		echo -e "${RED}Error, You've Entered Nothing !${RESET}"
 		    		continue
 	       		fi
 			
  			if [[ ! "$DBName" =~ ^[a-zA-Z0-9_]+$ ]]; then
-    				echo "Error, Database name only contain letters, numbers, and underscores."
+    				echo -e "${RED}Error, Database name only contain letters, numbers, and underscores.${RESET}"
     	 			continue
    			fi
 			
 			if [[ -e "$DBDIR/$DBName" ]]
 			then
 				rm -r $DBDIR/$DBName
-				echo " Database '$DBName' Dropped Successfully"
+				echo -e "${GREEN} Database '$DBName' Dropped Successfully${RESET}"
 				break
 			else
-				echo "Database '$DBName' does not exist."
+				echo -e "${RED}Database '$DBName' does not exist.${RESET}"
 			fi
 	done
 }

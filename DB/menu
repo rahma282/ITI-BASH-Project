@@ -1,6 +1,27 @@
 #!/bin/bash
 shopt -s extglob
-#let all DB store in spacific dir    -e ->exist
+
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+MAGENTA='\e[35m'
+CYAN='\e[36m'
+WHITE='\e[37m'
+
+# Define background colors
+BG_RED='\e[41m'
+BG_GREEN='\e[42m'
+BG_YELLOW='\e[43m'
+BG_BLUE='\e[44m'
+BG_MAGENTA='\e[45m'
+BG_CYAN='\e[46m'
+BG_WHITE='\e[47m'
+
+# Text attributes
+BOLD='\e[1m'
+UNDERLINE='\e[4m'
+RESET='\e[0m' # Reset to default
 
 source ./functions/create_db
 source ./functions/connect_db
@@ -11,6 +32,7 @@ source ./functions/list_tb
 source ./functions/drop_tb
 source ./functions/create_tb
 source ./functions/insertin_tb
+source ./functions/delete_from_table
 
 
 DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
@@ -23,25 +45,25 @@ function init_db_dir {
 		cd $DBDIR
 	fi
 	clear
-	echo "Database directory Loaded"
+	echo -e "${CYAN}Database directory Loaded ${RESET}"
 }
 
 function main_menu {
-  echo "=========================================="
+  echo -e "${BOLD}${YELLOW}========================================== ${RESET}"
   echo "Welcome to ITI DBMS"
   echo "Working directory: $DBDIR"
-  echo "=========================================="
+  echo -e "${BOLD}${YELLOW}========================================== ${RESET}"
   echo
   while true ;
   do
   	echo ""
-        echo "Main Menu"
+        echo -e "${BG_BLUE}------ Main Menu ------${RESET}"
         echo ""
-        echo "1 - Create Database"
-        echo "2 - List Databases"
-        echo "3 - Connect To Database"
-        echo "4 - Drop Database"
-        echo "5 - Exit"
+        echo -e "1 - ${CYAN} Create Database${RESET}"
+        echo -e "2 - ${CYAN} List Databases ${RESET}"
+        echo -e "3 - ${CYAN} Connect To Database ${RESET}"
+        echo -e "4 - ${CYAN} Drop Database ${RESET}"
+        echo -e "5 - ${RED} Exit ${RESET}"
         echo ""
         read -r -p "Enter your choice(1-5) : " choice
         
@@ -67,7 +89,7 @@ function main_menu {
 	*)
 		clear
 		echo ""
-        	echo "Invalid option."
+        	echo -e "${RED}Invalid option.${RESET}"
         	echo "==============="
         	echo ""
         	;;

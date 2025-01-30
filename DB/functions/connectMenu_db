@@ -1,22 +1,23 @@
 #!/bin/bash
 
+shopt -s extglob
 
 function connectMenu {
-	echo "Connected to database '$1' successfully"
+	echo -e "${GREEN}Connected to database '$1' successfully${RESET}"
 	while true 
 	do
 		
 		echo ""
-		echo "Database '$1' Options"
+		echo -e "${BOLD}${UNDERLINE}${MAGENTA}Database '$1' Options${RESET}"
 		echo ""
-		echo "1 - Create Table"
-		echo "2 - List Table"
-		echo "3 - Drop Table"
-		echo "4 - Insert Into Table"
-		echo "5 - Select From Table"
-		echo "6 - Delete From Table"
-		echo "7 - Update Table"
-		echo "8 - Back To Main Menu"
+		echo -e "1 - ${CYAN}Create Table${RESET}"
+		echo -e "2 - ${CYAN}List Table${RESET}"
+		echo -e "3 - ${CYAN}Drop Table${RESET}"
+		echo -e "4 - ${CYAN}Insert Into Table${RESET}"
+		echo -e "5 - ${CYAN}Select From Table${RESET}"
+		echo -e "6 - ${CYAN}Delete From Table${RESET}"
+		echo -e "7 - ${CYAN}Update Table${RESET}"
+		echo -e "8 - ${CYAN}Back To Main Menu${RESET}"
 		echo ""
 		read -r -p "Enter your choice(1-8) : " choice
 		case $choice in
@@ -43,6 +44,7 @@ function connectMenu {
 			;;
 		"8") 
 			echo "Exiting..."; 
+			clear
 			break 
 			;;
 		*)

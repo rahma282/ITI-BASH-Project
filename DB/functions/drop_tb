@@ -4,10 +4,10 @@ function drop_table {
 	if [[ ! "$(ls -1 "$DBDIR/$DBName")" ]]
 	then
 		clear
-		echo "Empty Database"
+		echo -e "${YELLOW}Empty Database${RESET}"
 		return
 	fi	
-	echo "Database Tables : "
+	echo -e "${CYAN}Database Tables : ${RESET}"
 	ls -1	
 	read -p "Please enter table name: " tableName
 	if [[ -e "$tableName" && -f $tableName ]]
@@ -16,9 +16,9 @@ function drop_table {
 		rm "$tableName"
 		rm .$tableName-MetaData
 		clear
-		echo "Table '$tableName' dropped successfully."
+		echo -e "${GREEN}Table '$tableName' dropped successfully.${RESET}"
 	else
 		clear
-		echo "Error: Table '$tableName' does not exist."
+		echo -e "${RED}Error: Table '$tableName' does not exist.${RESET}"
 	fi
 }
