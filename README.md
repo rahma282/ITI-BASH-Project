@@ -82,7 +82,6 @@ This project aims to develop a simple **Database Management System (DBMS)** usin
 ---
 
 ## Future Enhancements
-- Implementing **user authentication** for database access.
 - Supporting more **data types and constraints**.
 - Adding **export/import functionality** for tables.
 - Enhancing **error handling and logging**.
