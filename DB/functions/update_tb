@@ -11,19 +11,19 @@ function update_table {
 	if [[ -z "$TBName" ]]
 	then
 		clear
-		echo "Table name can't be empty. Please try again."
+		echo -e "${RED}Table name can't be empty. Please try again.${RESET}"
 		continue
 	fi
 	
 	if [[ ! "$TBName" =~ ^[a-zA-Z0-9_]+$ ]]
 	then
 		clear
-		echo "Error: Table name can only contain letters, numbers and underscores."
+		echo -e "${RED}Error: Table name can only contain letters, numbers and underscores.${RESET}"
 		continue
 	fi
 	  		
         if [[ ! -e $TBName ]]; then
-            echo "Table '$TBName' does not exist!"
+            echo -e "${YELLOW}Table '$TBName' does not exist!${RESET}"
             continue
         fi
 
@@ -31,7 +31,7 @@ function update_table {
 
 
 
-            echo "Current Table Data:"
+            echo -e "${MAGENTA}Current Table Data:${RESET}"
             cat "$TBName" | tr ':' ' '
             echo ""
 
@@ -39,7 +39,7 @@ function update_table {
 
             rowNum=$(awk -F: -v pk="$pk" '$1 == pk {print NR; exit}' "$TBName")
             if [[ -z $rowNum ]]; then
-                echo "Primary key not found!"
+                echo -e "${RED}Primary key not found!${RESET}"
                 continue
             fi
 
@@ -49,7 +49,7 @@ function update_table {
 
             if [[ $colNum -lt 1 || $colNum -gt $colCount ]]
             then
-                echo "Invalid column number!"
+                echo -e "${RED}Invalid column number!${RESET}"
                 continue
             fi
 
@@ -60,24 +60,24 @@ function update_table {
             case $colType in
                 "text")
                     if [[ ! "$newValue" =~ ^[a-zA-Z]+$ ]]; then
-                        echo "Invalid input! Must be text."
+                        echo -e"${RED}Invalid input! Must be text.${RESET}"
                         continue
                     fi
                     ;;
                 "number")
                     if [[ ! "$newValue" =~ ^[0-9]+$ ]]; then
-                        echo "Invalid input! Must be a number."
+                        echo -e"${RED}Invalid input! Must be a number.${RESET}"
                         continue
                     fi
                     ;;
                 "boolean")
                     if [[ "$newValue" != "true" && "$newValue" != "false" ]]; then
-                        echo "Invalid input! Must be 'true' or 'false'."
+                        echo -e"${RED}Invalid input! Must be 'true' or 'false'.${RESET}"
                         continue
                     fi
                     ;;
                 *)
-                    echo "Unknown data type!"
+                    echo -e"${YELLOW}Unknown data type!${RESET}"
                     continue
                     ;;
             esac
@@ -86,7 +86,7 @@ function update_table {
             if [[ $colNum -eq 1 ]]; then
                 if ! $(awk -F: -v new="$newValue" 'new==$1 {exit 1}' $TBName)
                 then
-                    echo "Error: Duplicate primary key!"
+                    echo -e "${RED}Error: Duplicate primary key!${RESET}"
                     continue
                 fi
             fi
@@ -99,7 +99,7 @@ function update_table {
                 print $0
             }' OFS=":" "$TBName" > temp && mv temp "$TBName"
 
-            echo "Update successful!"
+            echo -e "${GREEN}Update successful!${RESET}"
         
     done
 }

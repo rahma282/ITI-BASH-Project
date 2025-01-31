@@ -1,5 +1,9 @@
 #!/bin/bash
 function delete_from_table {
+	
+	while true
+	do
+	ls -1;
 	echo ""
         read -p "Enter table name (-1 to back to menu) : " TBName
         if [[ $TBName == -1 ]]; then
@@ -9,28 +13,28 @@ function delete_from_table {
 	if [[ -z "$TBName" ]]
 	then
 		clear
-		echo "Table name can't be empty. Please try again."
+		echo -e "${RED}Table name can't be empty. Please try again.${RESET}"
 		continue
 	fi
 	
 	if [[ ! "$TBName" =~ ^[a-zA-Z0-9_]+$ ]]
 	then
 		clear
-		echo "Error: Table name can only contain letters, numbers and underscores."
+		echo -e "${RED}Error: Table name can only contain letters, numbers and underscores.${RESET}"
 		continue
 	fi
 	
 	if [[ ! -e $TBName ]]; then
-            echo "Table '$TBName' does not exist!"
-            continue
+            echo -e "${YELLOW}Table '$TBName' does not exist!${RESET}"
+            break;
         fi
 
         echo ""
         
-         echo "Current Table Data:"
+         echo -e "${MAGENTA}Current Table Data:${RESET}"
          cat "$TBName" | tr ':' ' '
          echo ""
-         echo "Notice That first column is the primary-key"
+         echo -e "${BLUE}Notice That first column is the primary-key${RESET}"
          echo ""
          
          read -p "Enter primary key of the row you want to edit: " pk
@@ -38,9 +42,9 @@ function delete_from_table {
          if grep -q "^$pk:" "$TBName"
 	 then
 	 	awk -F: -v pkey="$pk" '$1 != pkey' "$TBName" > temp && mv temp "$TBName"
-         	echo "Line Deleted successfully"
+         	echo -e "${GREEN}Line Deleted successfully${RESET}"
 	 else
-         	echo "Line not found"
+         	echo -e "${RED}Line not found${RESET}"
          fi
-	
+done
 }
