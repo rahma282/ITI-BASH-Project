@@ -17,7 +17,7 @@ function connectMenu {
 		echo -e "5 - ${CYAN}Select From Table${RESET}"
 		echo -e "6 - ${CYAN}Delete From Table${RESET}"
 		echo -e "7 - ${CYAN}Update Table${RESET}"
-		echo -e "8 - ${CYAN}Back To Main Menu${RESET}"
+		echo -e "8 - ${RED}Back To Main Menu${RESET}"
 		echo ""
 		read -r -p "Enter your choice(1-8) : " choice
 		case $choice in

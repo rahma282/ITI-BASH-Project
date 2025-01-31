@@ -5,8 +5,10 @@ function drop_db {
 	while true
 	do
 		echo ""
-		echo -e "${CYAN}Available Databases :${RESET}"
-		ls -1
+		echo -e "${BOLD}${MAGENTA}Available Databases : ${RESET}"
+		echo -e "${WHITE}"
+		ls -1 | awk '{print "	-> " $0}'
+		echo -e "${RESET}"
 		echo ""
 		read -p "Enter Database name to drop (-1 to back to main menu) : " DBName
 			if [[ $DBName = -1 ]]
@@ -16,22 +18,27 @@ function drop_db {
 			
 			if [[ -z "$DBName" ]]
 			then
+				clear
 		    		echo -e "${RED}Error, You've Entered Nothing !${RESET}"
 		    		continue
 	       		fi
 			
  			if [[ ! "$DBName" =~ ^[a-zA-Z0-9_]+$ ]]; then
+ 				clear
     				echo -e "${RED}Error, Database name only contain letters, numbers, and underscores.${RESET}"
     	 			continue
    			fi
 			
 			if [[ -e "$DBDIR/$DBName" ]]
 			then
+				clear
 				rm -r $DBDIR/$DBName
 				echo -e "${GREEN} Database '$DBName' Dropped Successfully${RESET}"
 				break
 			else
+				clear
 				echo -e "${RED}Database '$DBName' does not exist.${RESET}"
+
 			fi
 	done
 }

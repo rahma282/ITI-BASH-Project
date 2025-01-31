@@ -5,5 +5,7 @@ function list_db {
 	echo ""
 	echo -e "${BOLD}${MAGENTA}Available Databases : ${RESET}"
 	echo ""
-	ls -1
+	echo -e "${WHITE}"
+	ls -1 | cat -n
+	echo -e "${RESET}"
 }

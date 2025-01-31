@@ -1,0 +1,106 @@
+#!/bin/bash
+
+function update_table {
+    while true; do
+        echo ""
+        read -p "Enter table name (-1 to back to menu) : " TBName
+        if [[ $TBName == -1 ]]; then
+            break
+        fi
+	
+	if [[ -z "$TBName" ]]
+	then
+		clear
+		echo "Table name can't be empty. Please try again."
+		continue
+	fi
+	
+	if [[ ! "$TBName" =~ ^[a-zA-Z0-9_]+$ ]]
+	then
+		clear
+		echo "Error: Table name can only contain letters, numbers and underscores."
+		continue
+	fi
+	  		
+        if [[ ! -e $TBName ]]; then
+            echo "Table '$TBName' does not exist!"
+            continue
+        fi
+
+        echo ""
+
+
+
+            echo "Current Table Data:"
+            cat "$TBName" | tr ':' ' '
+            echo ""
+
+            read -p "Enter primary key of the row you want to edit: " pk
+
+            rowNum=$(awk -F: -v pk="$pk" '$1 == pk {print NR; exit}' "$TBName")
+            if [[ -z $rowNum ]]; then
+                echo "Primary key not found!"
+                continue
+            fi
+
+            colCount=$(cat ".$TBName-MetaData" | wc -l)
+            echo "Table has $colCount columns."
+            read -p "Enter column number to edit (1-$colCount): " colNum
+
+            if [[ $colNum -lt 1 || $colNum -gt $colCount ]]
+            then
+                echo "Invalid column number!"
+                continue
+            fi
+
+            colType=$(awk -F: -v col="$colNum" 'NR==col {print $3; exit}' ".$TBName-MetaData")
+
+            read -p "Enter new value: " newValue
+
+            case $colType in
+                "text")
+                    if [[ ! "$newValue" =~ ^[a-zA-Z]+$ ]]; then
+                        echo "Invalid input! Must be text."
+                        continue
+                    fi
+                    ;;
+                "number")
+                    if [[ ! "$newValue" =~ ^[0-9]+$ ]]; then
+                        echo "Invalid input! Must be a number."
+                        continue
+                    fi
+                    ;;
+                "boolean")
+                    if [[ "$newValue" != "true" && "$newValue" != "false" ]]; then
+                        echo "Invalid input! Must be 'true' or 'false'."
+                        continue
+                    fi
+                    ;;
+                *)
+                    echo "Unknown data type!"
+                    continue
+                    ;;
+            esac
+
+
+            if [[ $colNum -eq 1 ]]; then
+                if ! $(awk -F: -v new="$newValue" 'new==$1 {exit 1}' $TBName)
+                then
+                    echo "Error: Duplicate primary key!"
+                    continue
+                fi
+            fi
+
+
+            awk -v row="$rowNum" -v col="$colNum" -v newVal="$newValue" -F: '{
+                if (NR == row) {
+                    $col = newVal
+                }
+                print $0
+            }' OFS=":" "$TBName" > temp && mv temp "$TBName"
+
+            echo "Update successful!"
+        
+    done
+}
+

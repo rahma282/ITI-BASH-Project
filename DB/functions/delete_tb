@@ -1,0 +1,46 @@
+#!/bin/bash
+function delete_from_table {
+	echo ""
+        read -p "Enter table name (-1 to back to menu) : " TBName
+        if [[ $TBName == -1 ]]; then
+            break
+        fi
+	
+	if [[ -z "$TBName" ]]
+	then
+		clear
+		echo "Table name can't be empty. Please try again."
+		continue
+	fi
+	
+	if [[ ! "$TBName" =~ ^[a-zA-Z0-9_]+$ ]]
+	then
+		clear
+		echo "Error: Table name can only contain letters, numbers and underscores."
+		continue
+	fi
+	
+	if [[ ! -e $TBName ]]; then
+            echo "Table '$TBName' does not exist!"
+            continue
+        fi
+
+        echo ""
+        
+         echo "Current Table Data:"
+         cat "$TBName" | tr ':' ' '
+         echo ""
+         echo "Notice That first column is the primary-key"
+         echo ""
+         
+         read -p "Enter primary key of the row you want to edit: " pk
+         
+         if grep -q "^$pk:" "$TBName"
+	 then
+	 	awk -F: -v pkey="$pk" '$1 != pkey' "$TBName" > temp && mv temp "$TBName"
+         	echo "Line Deleted successfully"
+	 else
+         	echo "Line not found"
+         fi
+	
+}

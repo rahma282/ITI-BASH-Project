@@ -14,18 +14,23 @@ function create_DB {
 			 if [[ -z "$DBName" ]]
 			then
 		    		echo -e "${RED}Database name cannot be empty. Please try again.${RESET}"
+		    		echo ""
 		    		continue
 			fi
  			if [[ ! "$DBName" =~ ^[a-zA-Z0-9_]+$ ]]; then
-	    			echo -e "${RED}Error: Database name can only contain letters, numbers, underscores, and hyphens.${RESET}"
+	    			echo -e "${RED}Error: Database name can only contain letters, numbers and underscores.${RESET}"
+				echo ""
 	    			continue
 	  		fi
 			if [[ -e "$DBDIR/$DBName" ]]
 			then
 				echo -e "${YELLOW}Database '$DBName' already exists${RESET}"
+				echo ""
 				continue
 			else 
 				mkdir $DBName
+				clear
+				echo ""
 				echo -e "${GREEN}Database '$DBName' is created successfully${RESET}"
 				break
 			fi

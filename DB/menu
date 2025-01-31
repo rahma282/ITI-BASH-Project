@@ -32,8 +32,9 @@ source ./functions/list_tb
 source ./functions/drop_tb
 source ./functions/create_tb
 source ./functions/insertin_tb
-source ./functions/delete_from_table
-source ./functions/select_from_table
+source ./functions/delete_tb
+source ./functions/select_tb
+source ./functions/update_tb
 
 DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
 
@@ -41,9 +42,8 @@ function init_db_dir {
 	if [[ ! -e $DBDIR ]]
 	then
 		mkdir -p $DBDIR
-	else
-		cd $DBDIR
 	fi
+	cd $DBDIR
 	clear
 	echo -e "${CYAN}Database directory Loaded ${RESET}"
 }
@@ -83,7 +83,7 @@ function main_menu {
 		drop_db
 		;;
 	"5") 
-		echo "Exiting..."; 
+		echo -e "${BOLD}${YELLOW}Exiting...${RESET}"; 
 		break 
 		;;
 	*)

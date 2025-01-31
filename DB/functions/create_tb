@@ -14,26 +14,26 @@ function create_table {
 			
 			if [[ -z "$tableName" ]]
 			then
-				clear
 		    		echo -e "${RED}Table name cannot be empty. Please try again.${RESET}"
+		    		echo ""
 		    		continue
 			fi
 			
 			if [[ ! "$tableName" =~ ^[a-zA-Z0-9_]+$ ]]
 			then
-				clear
 	    			echo -e "${RED}Error: Database name can only contain letters, numbers, underscores, and hyphens.${RESET}"
+	    			echo ""
 	    			continue
 	  		fi
 	  		
-			if [[ -e "$DBDIR/$tableName" && -f "$DBDIR/$tableName" ]]
+			if [[ -e "$tableName" ]]
 			then
-				clear
 				echo -e  "${YELLOW}Table '$tableName' already exists${RESET}"
+				echo ""
 				continue
 				
 			else
-				#create cols and rows
+
 				echo ""
 				read -p "please enter the columns number(-1 to back to menu) : " colNum
 				if [[ $colNum == -1 ]]
@@ -41,10 +41,19 @@ function create_table {
 					clear
 					break
 				fi
+				
+				if [[ $colNum -lt 2 ]]
+				then
+					clear
+					echo -e "${YELLOW}Must be at least 2 columns...${RESET}"
+					echo ""
+					continue
+				fi
+				
 				if [[ ! $colNum = [[:digit:]] ]]
 				then
 					clear
-					echo "Only digits available for columns number"
+					echo -e "${YELLOW}Only digits available for columns number${RESET}"
 					continue
 				fi
 				for ((i=0;i<$colNum;i++))
@@ -53,7 +62,7 @@ function create_table {
 				if [[ i -eq 0 ]]
 				then
 					echo ""
-					echo -e "${BLUE}Notice That this Line is gonna be the primary key of your table..${RESET}" 
+					echo -e "${BOLD}${BLUE}Notice That this Line is gonna be the primary key of your table..${RESET}" 
 					line=pk:
 					flag=1
 				fi
@@ -92,6 +101,13 @@ function create_table {
 					line=$line$colDataType
 				;;
 				"boolean")
+					if [[ i -eq 0 ]]
+					then
+						clear
+						echo ""
+						echo "${RED}Primary-key Can't be boolean${REST}" 
+						continue 2
+					fi
 					line=$line$colDataType
 				;;
 				"number")
