@@ -36,7 +36,7 @@ source ./functions/delete_tb
 source ./functions/select_tb
 source ./functions/update_tb
 
-DBDIR="$HOME/Documents/DBMS-Bash/DataBaseDir"
+DBDIR="$(pwd)/DataBaseDir"
 
 function init_db_dir {
 	if [[ ! -e $DBDIR ]]
