@@ -46,10 +46,10 @@ function insert_into_table {
     			case $colType in
 			"text")
 			
-				if [[ ! "$value" =~ ^[[:alpha:]]+$ ]]
+				if [[ ! "$value" =~ ^[[:alpha:]]+$ || "$value" == "true" || "$value" == "false" ]]
 				then
 					clear 
-					echo -e "${BLUE}$colName is a text, only alphabets allowed${RESET}"
+					echo -e "${RED}$colName is a text not boolean type[true|false], only alphabets allowed${RESET}"
 					continue 2
 				fi
 			;;
@@ -59,7 +59,7 @@ function insert_into_table {
 				if [[ ! "$value" = [[:digit:]] ]]
 				then
 					clear 
-					echo -e"${BLUE}$colName is a number, only digits allowed${RESET}"
+					echo -e"${RED}$colName is a number, only digits allowed${RESET}"
 					continue 2
 				fi
 			;;
@@ -68,7 +68,7 @@ function insert_into_table {
 				if [[ "$value" != "true" && "$value" != "false" ]]
 				then
 					clear
-					echo -e "${BLUE}$colName is a boolean, only true or false allowed${RESET}"
+					echo -e "${RED}$colName is a boolean, only true or false allowed${RESET}"
 					continue 2
 				fi
 			;;

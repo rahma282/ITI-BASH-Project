@@ -45,13 +45,12 @@ function init_db_dir {
 	fi
 	cd $DBDIR
 	clear
-	echo -e "${CYAN}Database directory Loaded ${RESET}"
+	
 }
 
 function main_menu {
   echo -e "${BOLD}${YELLOW}========================================== ${RESET}"
-  echo "Welcome to ITI DBMS"
-  echo "Working directory: $DBDIR"
+  echo "         ^-^Welcome to ITI DBMS^-^         "
   echo -e "${BOLD}${YELLOW}========================================== ${RESET}"
   echo
   while true ;

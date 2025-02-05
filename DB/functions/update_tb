@@ -52,6 +52,12 @@ function update_table {
                 echo -e "${RED}Invalid column number!${RESET}"
                 continue
             fi
+        if [[ ! "$colNum" =~ ^[0-9]+$ ]]
+	then
+		clear
+		echo -e "${RED}Error: Only numbers available.${RESET}"
+		continue
+	fi
 
             colType=$(awk -F: -v col="$colNum" 'NR==col {print $3; exit}' ".$TBName-MetaData")
 
@@ -59,8 +65,9 @@ function update_table {
 
             case $colType in
                 "text")
-                    if [[ ! "$newValue" =~ ^[a-zA-Z]+$ ]]; then
-                        echo -e"${RED}Invalid input! Must be text.${RESET}"
+                    if [[ ! "$newValue" =~ ^[a-zA-Z]+$ || "$newValue" == "true" || "$newValue" == "false" ]]; 
+                    then
+                        echo -e "${RED}Invalid input! Must be text not boolean type [true|false].${RESET}"
                         continue
                     fi
                     ;;
@@ -72,7 +79,7 @@ function update_table {
                     ;;
                 "boolean")
                     if [[ "$newValue" != "true" && "$newValue" != "false" ]]; then
-                        echo -e"${RED}Invalid input! Must be 'true' or 'false'.${RESET}"
+                        echo -e"${RED}Invalid input! Must be true or false.${RESET}"
                         continue
                     fi
                     ;;

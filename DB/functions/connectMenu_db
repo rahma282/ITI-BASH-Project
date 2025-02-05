@@ -8,7 +8,7 @@ function connectMenu {
 	do
 		
 		echo ""
-		echo -e "${BOLD}${UNDERLINE}${MAGENTA}Database '$1' Options${RESET}"
+		echo -e "${BG_MAGENTA}---- Table '$1' Menu ----${RESET}"
 		echo ""
 		echo -e "1 - ${CYAN}Create Table${RESET}"
 		echo -e "2 - ${CYAN}List Table${RESET}"
