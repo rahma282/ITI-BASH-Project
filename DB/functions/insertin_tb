@@ -59,7 +59,7 @@ function insert_into_table {
 				if [[ ! "$value" = [[:digit:]] ]]
 				then
 					clear 
-					echo -e"${RED}$colName is a number, only digits allowed${RESET}"
+					echo -e "${RED}$colName is a number, only digits allowed${RESET}"
 					continue 2
 				fi
 			;;

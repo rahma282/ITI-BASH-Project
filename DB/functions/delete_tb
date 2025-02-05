@@ -37,7 +37,7 @@ function delete_from_table {
          echo -e "${BLUE}Notice That first column is the primary-key${RESET}"
          echo ""
          
-         read -p "Enter primary key of the row you want to edit: " pk
+         read -p "Enter primary key of the row you want to delete: " pk
          
          if grep -q "^$pk:" "$TBName"
 	 then

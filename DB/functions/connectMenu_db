@@ -44,6 +44,7 @@ function connectMenu {
 			;;
 		"8") 
 			echo "Exiting..."; 
+			cd ..
 			clear
 			break 
 			;;

@@ -50,7 +50,7 @@ function init_db_dir {
 
 function main_menu {
   echo -e "${BOLD}${YELLOW}========================================== ${RESET}"
-  echo "         ^-^Welcome to ITI DBMS^-^         "
+  echo "         ^-^ Welcome to ITI DBMS ^-^         "
   echo -e "${BOLD}${YELLOW}========================================== ${RESET}"
   echo
   while true ;

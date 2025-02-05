@@ -7,7 +7,6 @@ function list_table {
 		echo -e "${UNDERLINE}${BLUE}Database Tables: ${RESET}"
 		ls -1
 		echo ""
-		echo ""
 	else
 		clear
 		echo ""

@@ -2,9 +2,7 @@
 
 function list_db {
 	clear
-	echo ""
 	echo -e "${BOLD}${MAGENTA}Available Databases : ${RESET}"
-	echo ""
 	echo -e "${WHITE}"
 	ls -1 | cat -n
 	echo -e "${RESET}"
